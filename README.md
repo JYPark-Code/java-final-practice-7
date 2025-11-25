@@ -1,4 +1,7 @@
-2024 7기 prep 최종 테스트 풀어보기.
+# 2025-26 8기 우테코 최종 테스트 대비
+* 2024-25 7기 prep 최종 테스트 풀어보기.
+
+참고 레포 : https://github.com/soeun2537/java-attendance-7-soeun2537
 
 #### git push (Angular git commit convension)
 

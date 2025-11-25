@@ -16,8 +16,10 @@ public class Application {
     }
 
     private static void run(Scanner sc) {
+        String command = sc.next();
         BasicPrompt basicPrompt = new BasicPrompt();
         BasicPrompt.printMenu();
+
     }
 
 }
