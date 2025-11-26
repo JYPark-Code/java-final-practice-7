@@ -1,3 +1,5 @@
+package entity;
+
 public enum AttendanceStatus {
     PRESENT, // 출석
     LATE, // 지각
