@@ -10,11 +10,6 @@ public class Attendance {
 
     public Attendance(LocalDate date, LocalTime lessonStart,
                       LocalTime arrivalTime, AttendanceStatus status) {
-
-        if (date == null || lessonStart == null || arrivalTime == null || status == null) {
-            throw new IllegalArgumentException("출석 시간은 필수 입력값입니다.");
-        }
-
         this.date = date;
         this.lessonStart = lessonStart;
         this.arrivalTime = arrivalTime;
