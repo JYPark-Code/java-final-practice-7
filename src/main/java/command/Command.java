@@ -51,7 +51,6 @@ public class Command {
         // 4. 등교 시간
         LocalTime arrivalTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
 
-
         // 5. Attendance 생성
         Attendance attendance = Attendance.fromArrival(today, lessonStart, arrivalTime);
 
@@ -69,5 +68,45 @@ public class Command {
         }
         return LocalTime.of(10, 0);
     }
+
+    public String c2_edit(String name, int date, String time){
+
+        // 1. 학생 찾기
+        Student student = repository.findByName(name)
+                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 이름입니다."));
+
+        // 2. 수정할 날짜
+        // 이번 달 + 입력받은 일(date)
+        LocalDate today = LocalDate.now();
+        LocalDate targetDate = LocalDate.of(today.getYear(), today.getMonth(), date);
+
+        LocalTime lessonStart = getLessonStart(targetDate);
+
+        // 3. 해당 출석 안 했을 경우
+        if(!student.hasAttendance(targetDate)){
+            throw new IllegalArgumentException("출석하지 않았습니다. 출석 기능을 이용해주세요.");
+        }
+
+        // 4. 등교 시간
+        LocalTime arrivalTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
+
+        // 5. Attendance 생성
+        Attendance newAttendance = Attendance.fromArrival(targetDate, lessonStart, arrivalTime);
+
+        // 6. 이전 기록 가져오면서 수정
+        Attendance oldAttendance =  student.editAttendance(targetDate, newAttendance);
+
+        // 7. 포맷팅
+        String oldText = AttendanceFormatter.format(oldAttendance);
+        String newText = AttendanceFormatter.formatTimeAndStatus(newAttendance);
+
+        return oldText + " -> " + newText + " 수정 완료!";
+
+    }
+
+
+
+
+
 
 }

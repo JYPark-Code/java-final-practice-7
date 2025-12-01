@@ -73,8 +73,6 @@ public class Attendance {
     }
 
 
-
-
     public LocalDate getDate() {
         return date;
     }

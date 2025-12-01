@@ -5,13 +5,13 @@ public enum WarningStatus {
     MEETING("면담"), //  - 결석 3회 이상
     DISMISS("제적"); //  - 결석 5회 이상
 
-    private final String status;
+    private final String text;
 
-    WarningStatus(String status){
-        this.status = status;
+    WarningStatus(String text){
+        this.text = text;
     }
 
-    public String getStatus() {
-        return status;
+    public String getText() {
+        return text;
     }
 }

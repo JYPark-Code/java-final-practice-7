@@ -53,13 +53,13 @@ public class Application {
                  */
                 case "1":
                     System.out.println("닉네임을 입력해 주세요.");
-                    String name = sc.nextLine();
+                    String name_1 = sc.nextLine();
                     System.out.println("등교 시간을 입력해 주세요.");
-                    String time = sc.nextLine();
+                    String time_1 = sc.nextLine();
 
-                    // c1_attendance가 "12월 13일 금요일 09:59 (출석)" 같은 문자열을 리턴한다고 가정
+                    // c1_attendance가 "12월 13일 금요일 09:59 (출석)" 문자열을 리턴
                     try {
-                        String result = cmd.c1_attendance(name, time);
+                        String result = cmd.c1_attendance(name_1, time_1);
                         System.out.println(result);   // 한 줄 출력
                     } catch (IllegalArgumentException e) {
                         System.out.println("[ERROR] " + e.getMessage());
@@ -67,7 +67,23 @@ public class Application {
                     break;
 
                 case "2":
-                    System.out.println("2번 기능");
+                    System.out.println("출석 수정하려는 닉네임을 입력해 주세요.");
+                    String name_2 = sc.nextLine();
+
+                    System.out.println("수정하려는 날짜(일)를 입력해 주세요.");
+                    int targetdate_2 = sc.nextInt();
+                    sc.nextLine(); // ← 버퍼에 남은 줄바꿈(\n) 소비
+
+                    System.out.println("언제로 변경하겠습니까?(등교 시간)");
+                    String time_2 = sc.nextLine();
+
+                    // "12월 13일 금요일 09:59 (출석)"
+                    try {
+                        String result = cmd.c2_edit(name_2, targetdate_2, time_2);
+                        System.out.println(result);   // 한 줄 출력
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("[ERROR] " + e.getMessage());
+                    }
                     break;
                 case "3":
                     System.out.println("3번 기능");

@@ -5,13 +5,13 @@ public enum AttendanceStatus {
     LATE("지각"),
     ABSENT("결석");
 
-    private final String status;
+    private final String text;
 
-    AttendanceStatus(String status){
-        this.status = status;
+    AttendanceStatus(String text){
+        this.text = text;
     }
 
-    public String getStatus() {
-        return status;
+    public String getText() {
+        return text;
     }
 }

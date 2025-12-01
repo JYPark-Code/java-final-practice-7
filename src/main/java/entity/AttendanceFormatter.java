@@ -5,11 +5,15 @@ import java.util.Locale;
 
 public class AttendanceFormatter {
 
+    private static final DateTimeFormatter dayFormatter
+            = DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN);
+
+    private static final DateTimeFormatter timeFormatter =
+            DateTimeFormatter.ofPattern("HH:mm");
+
+
+
     public static String format(Attendance attendance) {
-
-        DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN);
-
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
         String dayText = attendance.getDate().format(dayFormatter);
 
@@ -20,13 +24,22 @@ public class AttendanceFormatter {
             timeText = attendance.getArrivalTime().format(timeFormatter);
         }
 
-        String statusText = switch (attendance.getStatus()) {
-            case PRESENT -> "출석";
-            case LATE -> "지각";
-            case ABSENT -> "결석";
-        };
+        String statusText = attendance.getStatus().getText();
 
         return dayText + " " + timeText + " (" + statusText + ")";
 
+    }
+
+    public static String formatTimeAndStatus(Attendance attendance){
+        String timeText;
+        if(attendance.getArrivalTime() == null){
+            timeText = "--:--";
+        } else {
+            timeText = attendance.getArrivalTime().format(timeFormatter);
+        }
+
+        String statusText = attendance.getStatus().getText();
+
+        return timeText + " (" + statusText + ")";
     }
 }

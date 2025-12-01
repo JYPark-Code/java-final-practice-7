@@ -28,6 +28,18 @@ public class Student {
         attendanceRecords.add(record);
     }
 
+    public Attendance editAttendance(LocalDate date, Attendance newRecord){
+        for(int i = 0; i < attendanceRecords.size(); i++){
+            Attendance a = attendanceRecords.get(i);
+            if(a.getDate().equals(date)){
+                attendanceRecords.set(i, newRecord);
+                return a;
+            }
+        }
+        throw new IllegalArgumentException("해당 날짜의 출석 기록이 없습니다.");
+    }
+
+
     public boolean hasAttendance(LocalDate date) {
         for (Attendance a : attendanceRecords) {
             if(a.getDate().equals(date)){
