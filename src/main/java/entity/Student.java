@@ -1,5 +1,6 @@
 package entity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,5 +26,14 @@ public class Student {
 
     public void addAttendance(Attendance record){
         attendanceRecords.add(record);
+    }
+
+    public boolean hasAttendance(LocalDate date) {
+        for (Attendance a : attendanceRecords) {
+            if(a.getDate().equals(date)){
+                return true;
+            }
+        }
+        return false;
     }
 }

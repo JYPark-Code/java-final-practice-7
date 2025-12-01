@@ -1,9 +1,10 @@
-import entity.Attendance;
+package entity;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class AttendanceFormatter {
+
     public static String format(Attendance attendance) {
 
         DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN);

@@ -1,5 +1,6 @@
 package repository;
 
+import entity.Attendance;
 import entity.Student;
 
 import java.util.*;
@@ -23,4 +24,5 @@ public class InMemoryStudentRepository implements StudentRepository {
     public void save(Student student) {
         students.put(student.getName(), student);
     }
+
 }
