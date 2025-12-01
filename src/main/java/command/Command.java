@@ -9,6 +9,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
+import java.util.List;
 
 public class Command {
 
@@ -104,6 +106,71 @@ public class Command {
 
     }
 
+    public String c3_report(String name){
+        // 1. 학생 찾기
+        Student student = repository.findByName(name)
+                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 이름입니다."));
+
+        LocalDate today = LocalDate.now();
+        int year = today.getYear();
+        int month = today.getMonthValue();
+
+        // 2. 이번달 출석만 필터링, 날짜 순 정렬 (요구사항은 하루 전날까지인데 테스트 할려고 이렇게 뽑음)
+        List<Attendance> monthly = student.getAttendanceRecords().stream()
+                .filter(a -> a.getDate().getYear() == year && a.getDate().getMonthValue() == month)
+                .sorted(Comparator.comparing(Attendance::getDate))
+                .toList();
+
+        if (monthly.isEmpty()){
+            return "이번 달 " + name + "의 출석 기록이 없습니다.";
+        }
+
+        // 3. 카운트 세기
+        int presentCount = 0;
+        int lateCount = 0;
+        int absentCount = 0;
+
+        for (Attendance a : monthly){
+            switch (a.getStatus()) {
+                case PRESENT -> presentCount++;
+                case LATE -> lateCount++;
+                case ABSENT -> absentCount++;
+            }
+        }
+
+        // 지각 3회 -> 1회 결석
+        // 🔥 지각 → 결석 변환
+        int bonusAbsent = lateCount / 3;
+        absentCount += bonusAbsent;
+        lateCount = lateCount % 3;
+
+
+        // 4) 메시지 조립
+        StringBuilder sb = new StringBuilder();
+        sb.append("이번 달 ").append(name).append("의 출석 기록입니다.\n\n");
+
+        for (Attendance a : monthly) {
+            sb.append(AttendanceFormatter.format(a)).append("\n");
+        }
+
+        sb.append("\n");
+        sb.append("출석: ").append(presentCount).append("회\n");
+        sb.append("지각: ").append(lateCount).append("회\n");
+        sb.append("결석: ").append(absentCount).append("회\n");
+
+        // 면담/경고
+
+         if (absentCount >= 5) {
+             sb.append("\n제적 대상자입니다.\n");
+         } else if (absentCount >= 3) {
+            sb.append("\n면담 대상자입니다.\n");
+         } else if (absentCount >= 2) {
+             sb.append("\n경고 대상자입니다.\n");
+         }
+
+        return sb.toString();
+
+    }
 
 
 
