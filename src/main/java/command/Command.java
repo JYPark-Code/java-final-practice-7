@@ -36,13 +36,19 @@ public class Command {
      */
     public String c1_attendance(String name, String time){
 
-        // 1. 학생 찾기
-        Student student = repository.findByName(name)
-                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 이름입니다."));
-
-        // 2. 오늘 날짜
+        // 1. 오늘 날짜
         LocalDate today = LocalDate.now();
         LocalTime lessonStart = getLessonStart(today);
+        DayOfWeek dow = today.getDayOfWeek();
+
+        // 주말 제한
+        if (dow == DayOfWeek.SATURDAY || dow == DayOfWeek.SUNDAY) {
+            throw new IllegalArgumentException("[ERROR] 주말에는 출석을 받지 않습니다.");
+        }
+
+        // 2. 학생 찾기
+        Student student = repository.findByName(name)
+                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 이름입니다."));
 
         // 3. 출석 중복 확인
         if(student.hasAttendance(today)){
