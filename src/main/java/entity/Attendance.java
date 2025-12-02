@@ -87,4 +87,16 @@ public class Attendance {
     public AttendanceStatus getStatus() {
         return status;
     }
+
+    public boolean isPresent(){
+        return status == AttendanceStatus.PRESENT;
+    }
+
+    public boolean isLate(){
+        return status == AttendanceStatus.LATE;
+    }
+
+    public boolean isAbsent(){
+        return status == AttendanceStatus.ABSENT;
+    }
 }

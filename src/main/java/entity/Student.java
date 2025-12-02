@@ -1,5 +1,7 @@
 package entity;
 
+import record.AttendanceStats;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,9 @@ public class Student {
     }
 
     public void addAttendance(Attendance record){
+        if(hasAttendance(record.getDate())){
+            throw new IllegalArgumentException("이미 해당 날짜의 출석이 있습니다.");
+        }
         attendanceRecords.add(record);
     }
 
@@ -47,4 +52,50 @@ public class Student {
         }
         return false;
     }
+
+    /** Command에 작성했던 엔티티 책임 로직
+     *
+     */
+    public List<Attendance> getMonthlyRecords(int year, int month){
+        List<Attendance> monthly = new ArrayList<>();
+        for(Attendance a : attendanceRecords){
+            if(a.getDate().getYear() == year && a.getDate().getMonthValue() == month) {
+                monthly.add(a);
+            }
+        }
+        return monthly;
+    }
+
+    /**
+     *  개인 출석 통계
+     */
+    public AttendanceStats getMonthlyStats(int year, int month){
+        List<Attendance> monthly = getMonthlyRecords(year, month);
+
+        int present = 0;
+        int late = 0;
+        int absent = 0;
+
+        for(Attendance a : monthly){
+            if(a.isPresent()){
+                present++;
+            } else if(a.isLate()){
+                late++;
+            } else if(a.isAbsent()){
+                absent++;
+            }
+        }
+        return new AttendanceStats(present, late, absent).adjusted();
+    }
+
+    /**
+     * 위험도 반환
+     */
+    public WarningStatus getRiskLevel(int year, int month){
+        AttendanceStats stats = getMonthlyStats(year, month);
+        return WarningStatus.fromCounts(stats.absent(), stats.late());
+    }
+
+
+
 }

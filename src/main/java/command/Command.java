@@ -2,11 +2,11 @@ package command;
 
 import entity.*;
 import repository.StudentRepository;
+import service.AttendanceService;
+import service.AttendanceService.AttendanceEditResult;
 
-import java.time.DayOfWeek;
+
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -14,9 +14,12 @@ import java.util.List;
 public class Command {
 
     private final StudentRepository repository;
+    private final AttendanceService attendanceService;
 
-    public Command(StudentRepository repository) {
+    public Command(StudentRepository repository,
+                   AttendanceService attendanceService) {
         this.repository = repository;
+        this.attendanceService = attendanceService;
     }
 
     /**
@@ -35,46 +38,10 @@ public class Command {
      *
      */
     public String c1_attendance(String name, String time){
-
-        // 1. 오늘 날짜
-        LocalDate today = LocalDate.now();
-        LocalTime lessonStart = getLessonStart(today);
-        DayOfWeek dow = today.getDayOfWeek();
-
-        // 주말 제한
-        if (dow == DayOfWeek.SATURDAY || dow == DayOfWeek.SUNDAY) {
-            throw new IllegalArgumentException("[ERROR] 주말에는 출석을 받지 않습니다.");
-        }
-
-        // 2. 학생 찾기
-        Student student = repository.findByName(name)
-                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 이름입니다."));
-
-        // 3. 출석 중복 확인
-        if(student.hasAttendance(today)){
-            throw new IllegalArgumentException("이미 출석 확인하였습니다. 필요한 경우 수정 기능을 이용해주세요.");
-        }
-
-        // 4. 등교 시간
-        LocalTime arrivalTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
-
-        // 5. Attendance 생성
-        Attendance attendance = Attendance.fromArrival(today, lessonStart, arrivalTime);
-
-        // 6. 학생 출석 기록 추가
-        student.addAttendance(attendance);
-
+        Attendance attendance = attendanceService.recordAttendance(name, time);
         return AttendanceFormatter.format(attendance);
     }
 
-    private LocalTime getLessonStart(LocalDate date) {
-        // 월 13:00, 화~금 10:00
-        DayOfWeek dayOfWeek = date.getDayOfWeek();
-        if(dayOfWeek == DayOfWeek.MONDAY){
-            return LocalTime.of(13, 0);
-        }
-        return LocalTime.of(10, 0);
-    }
 
     /**
      *  2. 출석 수정
@@ -84,39 +51,14 @@ public class Command {
      * @return
      */
     public String c2_edit(String name, int date, String time){
+        AttendanceEditResult result = attendanceService.editAttendance(name, date, time);
 
-        // 1. 학생 찾기
-        Student student = repository.findByName(name)
-                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 이름입니다."));
-
-        // 2. 수정할 날짜
-        // 이번 달 + 입력받은 일(date)
-        LocalDate today = LocalDate.now();
-        LocalDate targetDate = LocalDate.of(today.getYear(), today.getMonth(), date);
-
-        LocalTime lessonStart = getLessonStart(targetDate);
-
-        // 3. 해당 출석 안 했을 경우
-        if(!student.hasAttendance(targetDate)){
-            throw new IllegalArgumentException("출석하지 않았습니다. 출석 기능을 이용해주세요.");
-        }
-
-        // 4. 등교 시간
-        LocalTime arrivalTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
-
-        // 5. Attendance 생성
-        Attendance newAttendance = Attendance.fromArrival(targetDate, lessonStart, arrivalTime);
-
-        // 6. 이전 기록 가져오면서 수정
-        Attendance oldAttendance =  student.editAttendance(targetDate, newAttendance);
-
-        // 7. 포맷팅
-        String oldText = AttendanceFormatter.format(oldAttendance);
-        String newText = AttendanceFormatter.formatTimeAndStatus(newAttendance);
+        String oldText = AttendanceFormatter.format(result.getOldAttendance());
+        String newText = AttendanceFormatter.formatTimeAndStatus(result.getNewAttendance());
 
         return oldText + " -> " + newText + " 수정 완료!";
-
     }
+
 
     /**
      * 3. 학생 개인 출결 리포트

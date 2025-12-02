@@ -2,6 +2,7 @@ import command.Command;
 import command.CommandRouter;
 import repository.InMemoryStudentRepository;
 import repository.StudentRepository;
+import service.AttendanceService;
 import util.CsvLoader;
 
 import java.io.IOException;
@@ -13,9 +14,10 @@ public class Application {
 
         Scanner sc = new Scanner(System.in);
         StudentRepository repo = new InMemoryStudentRepository();
+        AttendanceService attendanceService = new AttendanceService(repo);
         CsvLoader.load("src/main/resources/attendance.csv", repo);
 
-        Command cmd = new Command(repo);
+        Command cmd = new Command(repo, attendanceService);
         CommandRouter router = new CommandRouter(cmd, sc);
 
         BasicPrompt.printMenu();
