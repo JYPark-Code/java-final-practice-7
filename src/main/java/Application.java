@@ -24,7 +24,7 @@ public class Application {
 
         CsvLoader.load("src/main/resources/attendance.csv", repo);
 
-        Command cmd = new Command(repo, attendanceService, reportService, watchlistService);
+        Command cmd = new Command(attendanceService, reportService, watchlistService);
         CommandRouter router = new CommandRouter(cmd, sc);
 
         BasicPrompt.printMenu();

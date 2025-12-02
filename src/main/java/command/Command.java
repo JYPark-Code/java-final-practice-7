@@ -7,25 +7,17 @@ import formatter.WatchlistFormatter;
 import repository.StudentRepository;
 import service.*;
 import service.AttendanceService.AttendanceEditResult;
-
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class Command {
 
-    private final StudentRepository repository;
     private final AttendanceService attendanceService;
     private final ReportService reportService;
     private final WatchlistService watchlistService;
 
-    public Command(StudentRepository repository,
-                   AttendanceService attendanceService,
+    public Command(AttendanceService attendanceService,
                    ReportService reportService,
                    WatchlistService watchlistService) {
-        this.repository = repository;
         this.attendanceService = attendanceService;
         this.reportService = reportService;
         this.watchlistService = watchlistService;
