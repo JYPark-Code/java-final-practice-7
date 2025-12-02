@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -72,12 +73,10 @@ public class CsvLoader {
     }
 
     private static LocalTime getLessonStart(LocalDate date) {
-        return switch (date.getDayOfWeek()){
-            case MONDAY -> LocalTime.of(13, 0); // 월요일 13시 (오후 1시)
-            default -> LocalTime.of(10, 0); // 화~금 10시
-        };
-
-
+        if (date.getDayOfWeek() == DayOfWeek.MONDAY){
+            return LocalTime.of(13, 0); // 월요일 13시 (오후 1시)
+        }
+        return LocalTime.of(10, 0); // 화~금 10시
     }
 
 }
