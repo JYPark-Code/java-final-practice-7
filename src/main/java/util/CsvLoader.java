@@ -31,7 +31,7 @@ public class CsvLoader {
 
                 String[] parts = line.split(",", 2);
                 if(parts.length < 2) {
-                    // continue;
+                     continue;
                 }
 
                 String name = parts[0].trim();

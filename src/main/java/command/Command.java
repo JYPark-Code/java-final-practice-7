@@ -1,14 +1,13 @@
 package command;
 
-import entity.Attendance;
-import entity.Student;
+import entity.*;
 import repository.StudentRepository;
-import entity.AttendanceFormatter;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -71,6 +70,13 @@ public class Command {
         return LocalTime.of(10, 0);
     }
 
+    /**
+     *  2. 출석 수정
+     * @param name
+     * @param date
+     * @param time
+     * @return
+     */
     public String c2_edit(String name, int date, String time){
 
         // 1. 학생 찾기
@@ -106,6 +112,11 @@ public class Command {
 
     }
 
+    /**
+     * 3. 학생 개인 출결 리포트
+     * @param name
+     * @return
+     */
     public String c3_report(String name){
         // 1. 학생 찾기
         Student student = repository.findByName(name)
@@ -115,11 +126,19 @@ public class Command {
         int year = today.getYear();
         int month = today.getMonthValue();
 
-        // 2. 이번달 출석만 필터링, 날짜 순 정렬 (요구사항은 하루 전날까지인데 테스트 할려고 이렇게 뽑음)
+        // 2. 이번달 출석만 필터링, 날짜 순 정렬 (요구사항은 하루 전날까지인데, 금일이 12월 초라 테스트할려고 이렇게 뽑음)
         List<Attendance> monthly = student.getAttendanceRecords().stream()
                 .filter(a -> a.getDate().getYear() == year && a.getDate().getMonthValue() == month)
                 .sorted(Comparator.comparing(Attendance::getDate))
                 .toList();
+
+        // 하루 전까지라고 하면, 다음과 같다.
+//        List<Attendance> filtered = student.getAttendanceRecords().stream()
+//                .filter(a -> a.getDate().isBefore(today))  //  오늘 이전만!
+//                .filter(a -> a.getDate().getYear() == year)
+//                .filter(a -> a.getDate().getMonthValue() == month)
+//                .sorted(Comparator.comparing(Attendance::getDate))
+//                .toList();
 
         if (monthly.isEmpty()){
             return "이번 달 " + name + "의 출석 기록이 없습니다.";
@@ -172,8 +191,131 @@ public class Command {
 
     }
 
+    /**
+     * 전체 학생 제적 위험 리스트
+     * @return
+     */
+    public String c4_watchlist(){
+        StringBuilder sb4 = new StringBuilder();
+        sb4.append("제적 위험자 조회결과\n");
 
+        LocalDate today = LocalDate.now();
 
+        // 출력할 제적 위험 리스트
+        List<RiskEntry> entries = new ArrayList<>();
+
+        // 1. 모든 학생
+        for (Student student : repository.findAll()){
+
+            List<Attendance> all = student.getAttendanceRecords();
+            List<Attendance> filtered = new ArrayList<>();
+
+            for(Attendance a : all){
+                LocalDate d = a.getDate();
+                if (d.getYear() == today.getYear()
+                        && d.getMonthValue() == today.getMonthValue()) {
+                    filtered.add(a);
+                }
+            }
+
+            if (filtered.isEmpty()) continue;
+
+            int present = 0;
+            int late = 0;
+            int absent = 0;
+
+            for (Attendance a: filtered){
+                AttendanceStatus status = a.getStatus();
+                if(status == AttendanceStatus.PRESENT) present++;
+                else if(status == AttendanceStatus.LATE) late++;
+                else if(status == AttendanceStatus.ABSENT) absent++;
+            }
+
+            // 위험도 결정
+            WarningStatus level = decideRiskLevel(present, late, absent);
+            if(level == WarningStatus.NONE){
+                continue; // 정상 (작성에서 빠질 에정)
+            }
+
+            // 결석 보정
+            int adjustAbsent = adjustedAbsentForSort(late, absent);
+            int remainLate =remainingLateAfterAdjust(late);
+
+            entries.add(new RiskEntry(student.getName(), present, remainLate, adjustAbsent, level));
+
+        }
+
+        if(entries.isEmpty()){
+            sb4.append("- 제적 위험자가 없습니다.");
+            return sb4.toString();
+        }
+
+        // 2. 정렬
+        entries.sort((e1, e2) ->{
+            // 1) 제적 > 면담 > 경고
+            int cmpLevel = Integer.compare(e1.level.getPriority(), e2.level.getPriority());
+            if (cmpLevel != 0) return cmpLevel;
+
+            // 2) 결석(보정) 내림차순
+            int cmpAbsent = Integer.compare(e2.absent, e1.absent);
+            if (cmpAbsent != 0) return cmpAbsent;
+
+            // 3) 지각(보정 후 남은 것) 내림차순
+            int cmpLate = Integer.compare(e2.late, e1.late);
+            if (cmpLate != 0) return cmpLate;
+
+            // 4) 닉네임 오름차순
+            return e1.name.compareTo(e2.name);
+        });
+
+        // 3. 출력
+        for (RiskEntry e : entries) {
+            sb4.append("- ")
+                    .append(e.name)
+                    .append(": 결석 ").append(e.absent).append("회, ")
+                    .append("지각 ").append(e.late).append("회 ")
+                    .append("(").append(e.level.getText()).append(")")
+                    .append("\n");
+        }
+
+        return sb4.toString();
+    }
+
+    // RiskEntry DTO
+    private static class RiskEntry {
+        String name;
+        int present;
+        int late;           // 보정 후 남은 지각
+        int absent;         // 보정 후 결석
+        WarningStatus level;
+
+        RiskEntry(String name, int present, int late, int absent, WarningStatus level) {
+            this.name = name;
+            this.present = present;
+            this.late = late;
+            this.absent = absent;
+            this.level = level;
+        }
+    }
+
+    private WarningStatus decideRiskLevel(int present, int late, int absent) {
+        // 지각 → 결석 보정
+        int bonusAbsent = late / 3;
+        int adjustedAbsent = absent + bonusAbsent;
+
+        if (adjustedAbsent >= 5) return WarningStatus.DISMISS;
+        if (adjustedAbsent >= 3) return WarningStatus.MEETING;
+        if (adjustedAbsent >= 2) return WarningStatus.WARNING;
+        return WarningStatus.NONE;
+    }
+
+    private int adjustedAbsentForSort(int late, int absent) {
+        return absent + (late / 3);
+    }
+
+    private int remainingLateAfterAdjust(int late) {
+        return late % 3;
+    }
 
 
 }

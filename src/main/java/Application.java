@@ -139,8 +139,23 @@ public class Application {
                     }
 
                     break;
+                /**
+                 * 4. 제적 위험 리스트 (전체)
+                 *
+                 * 제적 위험자 조회 결과 - (예시)
+                 * - 빙티: 결석 3회, 지각 2회 (면담)
+                 * - 이든: 결석 2회, 지각 4회 (면담)
+                 * - 쿠키: 결석 2회, 지각 2회 (경고)
+                 * - 빙봉: 결석 1회, 지각 5회 (경고)
+                 */
                 case "4":
-                    System.out.println("4번 기능");
+                    try {
+                    String result = cmd.c4_watchlist();
+                    System.out.println();
+                    System.out.println(result);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("[ERROR] " + e.getMessage());
+                    }
                     break;
                 default:
                     throw new IllegalArgumentException("[ERROR] 잘못된 형식을 입력하였습니다.");
