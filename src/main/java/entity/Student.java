@@ -53,8 +53,8 @@ public class Student {
         return false;
     }
 
-    /** Command에 작성했던 엔티티 책임 로직
-     *
+    /**
+     * Command에 작성했던 엔티티 책임 로직
      */
     public List<Attendance> getMonthlyRecords(int year, int month){
         List<Attendance> monthly = new ArrayList<>();
