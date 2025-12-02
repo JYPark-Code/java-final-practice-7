@@ -39,7 +39,6 @@ public class Student {
         throw new IllegalArgumentException("해당 날짜의 출석 기록이 없습니다.");
     }
 
-
     public boolean hasAttendance(LocalDate date) {
         for (Attendance a : attendanceRecords) {
             if(a.getDate().equals(date)){
