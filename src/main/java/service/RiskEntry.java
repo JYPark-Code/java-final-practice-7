@@ -1,6 +1,6 @@
 package service;
 
-import entity.WarningStatus;
+import domain.WarningStatus;
 
 public class RiskEntry {
 

@@ -1,6 +1,6 @@
 package formatter;
 
-import entity.Attendance;
+import domain.Attendance;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;

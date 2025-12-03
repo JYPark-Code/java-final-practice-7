@@ -1,7 +1,7 @@
 package service;
 
-import entity.Attendance;
-import entity.Student;
+import domain.Attendance;
+import domain.Student;
 import repository.StudentRepository;
 
 import java.time.DayOfWeek;

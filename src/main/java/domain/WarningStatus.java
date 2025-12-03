@@ -1,4 +1,4 @@
-package entity;
+package domain;
 
 public enum WarningStatus {
     NONE("정상",3),

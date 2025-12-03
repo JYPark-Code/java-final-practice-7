@@ -1,10 +1,11 @@
-package entity;
+package domain;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+// 값 객체 VO
 public class Attendance {
 
     private final LocalDate date;

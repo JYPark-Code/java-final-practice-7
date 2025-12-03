@@ -1,8 +1,7 @@
 package formatter;
 
-import entity.Attendance;
-import entity.AttendanceStatus;
-import entity.WarningStatus;
+import domain.Attendance;
+import domain.WarningStatus;
 import record.AttendanceStats;
 import service.MonthlyReport;
 

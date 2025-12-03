@@ -1,7 +1,7 @@
 package service;
 
-import entity.Attendance;
-import entity.WarningStatus;
+import domain.Attendance;
+import domain.WarningStatus;
 import record.AttendanceStats;
 
 import java.util.List;

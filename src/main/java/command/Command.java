@@ -1,6 +1,6 @@
 package command;
 
-import entity.*;
+import domain.*;
 import formatter.AttendanceFormatter;
 import formatter.ReportFormatter;
 import formatter.WatchlistFormatter;

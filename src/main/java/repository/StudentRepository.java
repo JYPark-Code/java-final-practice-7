@@ -1,6 +1,6 @@
 package repository;
 
-import entity.Student;
+import domain.Student;
 
 import java.util.Collection;
 import java.util.Optional;

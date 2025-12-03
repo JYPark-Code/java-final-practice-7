@@ -1,9 +1,9 @@
 package service;
 
-import entity.Attendance;
-import entity.AttendanceStatus;
-import entity.Student;
-import entity.WarningStatus;
+import domain.Attendance;
+import domain.AttendanceStatus;
+import domain.Student;
+import domain.WarningStatus;
 import record.AttendanceStats;
 import repository.StudentRepository;
 
