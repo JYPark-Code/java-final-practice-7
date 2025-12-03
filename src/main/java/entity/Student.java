@@ -23,7 +23,7 @@ public class Student {
     }
 
     public List<Attendance> getAttendanceRecords() {
-        return attendanceRecords;
+        return List.copyOf(attendanceRecords); // 데이터 변형 방지.
     }
 
     public void addAttendance(Attendance record){
@@ -95,7 +95,6 @@ public class Student {
         AttendanceStats stats = getMonthlyStats(year, month);
         return WarningStatus.fromCounts(stats.absent(), stats.late());
     }
-
 
 
 }

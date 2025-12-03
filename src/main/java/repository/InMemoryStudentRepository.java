@@ -1,6 +1,5 @@
 package repository;
 
-import entity.Attendance;
 import entity.Student;
 
 import java.util.*;
