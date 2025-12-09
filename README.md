@@ -108,9 +108,9 @@ IllegalArgumentException을 발생시키고, "\[ERROR]"로 시작하는 오류 �
 
 ### 과제 진행 요구 사항
 
-- [x] 우아한테크코스 출석 비공개 저장소를 생성한다.
+- [ ] 우아한테크코스 출석 비공개 저장소를 생성한다.
 - [ ] 우아한테크코스 계정을 collaborator로 초대한다.
-- [x] 진행한 과제는 저장소의 main 브랜치에 커밋한다.
+- [ ] 진행한 과제는 저장소의 main 브랜치에 커밋한다.
 - [x] 기능을 구현하기 전에 README.md에 구현할 기능 목록을 정리해 추가한다.
 - [x] Git의 커밋은 README.md에 정리된 기능 목록 단위로 나눈다. (AngularJS Git Commit Message Conventions 참고)
 
@@ -264,11 +264,11 @@ Q
 - [x] Indent(인덴트, 들여쓰기) depth는 최대 2까지만 허용한다. (메서드를 분리하는 것을 추천)
 - [x] 3항 연산자를 사용하지 않는다.
 - [x] 메서드는 한 가지 일만 하도록 최대한 작게 만든다.
-- [ ] JUnit 5와 AssertJ를 사용하여 테스트 코드를 작성한다.
+- [x] JUnit 5와 AssertJ를 사용하여 테스트 코드를 작성한다.
 - [x] 메서드 길이는 15라인을 초과하지 않는다.
 - [x] else 예약어 및 switch-case 문 사용을 금지한다.
 - [x] Enum을 사용하여 구현한다.
-- [ ] UI 로직((System.out, System.in, Scanner)을 제외한 구현 기능에 대해 단위 테스트를 작성한다.
-- [ ] camp.nextstep.edu.missionutils에서 제공하는 DateTimes 및 Console API를 사용하여 구현해야 한다.
-    - [ ] DateTimes.now()를 사용하여 현재 날짜와 시간을 가져온다.
-    - [ ] Console.readLine()을 사용하여 사용자 입력을 처리한다.
+- [x] UI 로직((System.out, System.in, Scanner)을 제외한 구현 기능에 대해 단위 테스트를 작성한다.
+- [x] camp.nextstep.edu.missionutils에서 제공하는 DateTimes 및 Console API를 사용하여 구현해야 한다.
+    - [x] DateTimes.now()를 사용하여 현재 날짜와 시간을 가져온다.
+    - [x] Console.readLine()을 사용하여 사용자 입력을 처리한다.
