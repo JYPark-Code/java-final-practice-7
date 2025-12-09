@@ -1,3 +1,5 @@
+import camp.nextstep.edu.missionutils.DateTimes;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -6,7 +8,7 @@ public class BasicPrompt {
 
     public static void printMenu(){
 
-        LocalDate today = LocalDate.now();
+        LocalDate today = DateTimes.now().toLocalDate();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN);
 

@@ -1,15 +1,15 @@
 package command;
 
+import camp.nextstep.edu.missionutils.Console;
+
 import java.util.Scanner;
 
 public class CommandRouter {
 
     private final Command cmd;
-    private final Scanner sc;
 
-    public CommandRouter(Command cmd, Scanner sc){
+    public CommandRouter(Command cmd){
         this.cmd = cmd;
-        this.sc = sc;
     }
 
     public boolean execute(String input){
@@ -45,10 +45,10 @@ public class CommandRouter {
     private void runAttendance(){
         try{
             System.out.println("닉네임을 입력해 주세요.");
-            String name = sc.nextLine();
+            String name = Console.readLine();
 
             System.out.println("등교 시간을 입력해 주세요.");
-            String time = sc.nextLine();
+            String time = Console.readLine();
 
             System.out.println(cmd.c1_attendance(name, time));
         } catch (IllegalArgumentException e) {
@@ -59,13 +59,13 @@ public class CommandRouter {
     private void runEdit(){
         try{
             System.out.println("출석 수정하려는 닉네임을 입력해 주세요.");
-            String name = sc.nextLine();
+            String name = Console.readLine();
 
             System.out.println("수정하려는 날짜(일)를 입력해 주세요.");
-            int day = Integer.parseInt(sc.nextLine());
+            int day = Integer.parseInt(Console.readLine());
 
             System.out.println("언제로 변경하겠습니까?(등교 시간)");
-            String time = sc.nextLine();
+            String time = Console.readLine();
 
             System.out.println(cmd.c2_edit(name, day, time));
         } catch (IllegalArgumentException e) {
@@ -76,7 +76,7 @@ public class CommandRouter {
     private void runReport(){
         try{
             System.out.println("닉네임을 입력해 주세요.");
-            String name = sc.nextLine();
+            String name = Console.readLine();
             System.out.println(cmd.c3_report(name));
         } catch (IllegalArgumentException e) {
             System.out.println("[ERROR] " + e.getMessage());

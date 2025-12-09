@@ -1,3 +1,4 @@
+import camp.nextstep.edu.missionutils.Console;
 import command.Command;
 import command.CommandRouter;
 import repository.InMemoryStudentRepository;
@@ -8,13 +9,11 @@ import service.WatchlistService;
 import util.CsvLoader;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class Application {
 
     public static void main(String[] args) throws IOException {
 
-        Scanner sc = new Scanner(System.in);
         StudentRepository repo = new InMemoryStudentRepository();
 
         AttendanceService attendanceService = new AttendanceService(repo);
@@ -25,18 +24,18 @@ public class Application {
         CsvLoader.load("src/main/resources/attendance.csv", repo);
 
         Command cmd = new Command(attendanceService, reportService, watchlistService);
-        CommandRouter router = new CommandRouter(cmd, sc);
+        CommandRouter router = new CommandRouter(cmd);
 
         BasicPrompt.printMenu();
 
         while (true){
-            String input = sc.nextLine();
+            String input = Console.readLine();
             boolean continueProgram = router.execute(input);
             if(!continueProgram) break;
             BasicPrompt.printMenu();
         }
 
-        sc.close();
+        Console.close();
     }
 }
 

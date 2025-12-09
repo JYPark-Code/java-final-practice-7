@@ -66,6 +66,21 @@ public class WatchlistService {
         return result;
     }
 
+    private List<Attendance> filterUntilYesterday(List<Attendance> all) {
+        List<Attendance> result = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+
+        for (Attendance a : all) {
+            LocalDate date = a.getDate();
+
+            if (date.isBefore(today)) {
+                result.add(a);
+            }
+        }
+
+        return result;
+    }
+
     private AttendanceStats countStats(List<Attendance> records) {
         int present = 0;
         int late = 0;
