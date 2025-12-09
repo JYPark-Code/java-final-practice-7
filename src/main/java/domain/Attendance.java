@@ -66,7 +66,7 @@ public class Attendance {
 
         if (diffMinutes <= 5) {
             return AttendanceStatus.PRESENT; // or LATE로 보고 싶으면 여기만 바꾸면 됨
-        } else if (diffMinutes < 30) {
+        } else if (diffMinutes <= 30) {
             return AttendanceStatus.LATE;
         } else {
             return AttendanceStatus.ABSENT;
