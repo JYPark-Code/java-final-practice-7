@@ -28,13 +28,21 @@ public class Application {
         Command cmd = new Command(attendanceService, reportService, watchlistService);
         CommandRouter router = new CommandRouter(cmd);
 
-        BasicPrompt.printMenu();
+//        BasicPrompt.printMenu();
 
         while (true){
-            String input = Console.readLine();
-            boolean continueProgram = router.execute(input);
-            if(!continueProgram) break;
-            BasicPrompt.printMenu();
+            try{
+                BasicPrompt.printMenu();
+                String input = Console.readLine();
+                boolean continueProgram = router.execute(input);
+                if(!continueProgram) break;
+
+            } catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+                BasicPrompt.printMenu();
+                throw e; // 오류가 나면 프로그램은 죽는다. (
+            }
+
         }
 
         Console.close();

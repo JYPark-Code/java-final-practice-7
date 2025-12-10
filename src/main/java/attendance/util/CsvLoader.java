@@ -72,7 +72,7 @@ public class CsvLoader {
         return s;
     }
 
-    private static LocalTime getLessonStart(LocalDate date) {
+    public static LocalTime getLessonStart(LocalDate date) {
         if (date.getDayOfWeek() == DayOfWeek.MONDAY){
             return LocalTime.of(13, 0); // 월요일 13시 (오후 1시)
         }

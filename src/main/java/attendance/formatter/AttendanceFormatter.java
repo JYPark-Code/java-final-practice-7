@@ -8,7 +8,7 @@ import java.util.Locale;
 public class AttendanceFormatter {
 
     private static final DateTimeFormatter dayFormatter
-            = DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN);
+            = DateTimeFormatter.ofPattern("MM월 dd일 E요일", Locale.KOREAN);
 
     private static final DateTimeFormatter timeFormatter =
             DateTimeFormatter.ofPattern("HH:mm");

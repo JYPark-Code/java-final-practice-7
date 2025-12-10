@@ -12,7 +12,7 @@ public class BasicPrompt {
 
         LocalDate today = DateTimes.now().toLocalDate();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일 E요일", Locale.KOREAN);
 
         System.out.println("오늘은 " + today.format(formatter) + "입니다. 기능을 선택해 주세요.");
         System.out.println("1. 출석 확인");

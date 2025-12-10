@@ -29,8 +29,13 @@ public class Command {
     }
 
     public void validateAttendableDate() {
-        attendanceService.validateAttendableDate(LocalDate.now());
+        attendanceService.validateAttendableDate();
     }
+
+    public void validateDayOfMonth(int day) {
+        attendanceService.validateDayOfMonth(day);
+    }
+
 
     /**
      * 1번 커맨드 - 출석
@@ -98,6 +103,7 @@ public class Command {
         List<RiskEntry> entries = watchlistService.buildMonthlyWatchlist();
         return WatchlistFormatter.format(entries);
     }
+
 
 
 }

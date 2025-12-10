@@ -41,62 +41,46 @@ public class CommandRouter {
     }
 
     private void runAttendance(){
-        try{
-            // 토, 일요일 아닌지 체크
-            cmd.validateAttendableDate();
+        // 토, 일요일 아닌지 체크
+        cmd.validateAttendableDate();
 
-            System.out.println("닉네임을 입력해 주세요.");
-            String name = Console.readLine();
+        System.out.println("닉네임을 입력해 주세요.");
+        String name = Console.readLine();
 
-            // 닉네임 검증
-            cmd.validateNickname(name);
+        // 닉네임 검증
+        cmd.validateNickname(name);
 
-            System.out.println("등교 시간을 입력해 주세요.");
-            String time = Console.readLine();
+        System.out.println("등교 시간을 입력해 주세요.");
+        String time = Console.readLine();
 
-            System.out.println(cmd.c1_attendance(name, time));
-        } catch (IllegalArgumentException e) {
-            System.out.println("[ERROR] " + e.getMessage());
-        }
+        System.out.println(cmd.c1_attendance(name, time));
     }
 
     private void runEdit(){
-        try{
-            System.out.println("출석 수정하려는 닉네임을 입력해 주세요.");
-            String name = Console.readLine();
+        System.out.println("출석 수정하려는 닉네임을 입력해 주세요.");
+        String name = Console.readLine();
+        // 닉네임 검증
+        cmd.validateNickname(name);
 
-            System.out.println("수정하려는 날짜(일)를 입력해 주세요.");
-            int day = Integer.parseInt(Console.readLine());
+        System.out.println("수정하려는 날짜(일)를 입력해 주세요.");
+        int day = Integer.parseInt(Console.readLine());
+        // 날짜 검증
+        cmd.validateDayOfMonth(day);
 
-            System.out.println("언제로 변경하겠습니까?(등교 시간)");
-            String time = Console.readLine();
+        System.out.println("언제로 변경하겠습니까?(등교 시간)");
+        String time = Console.readLine();
 
-            System.out.println(cmd.c2_edit(name, day, time));
-
-        } catch (NumberFormatException e) {
-            System.out.println("[ERROR] 날짜는 숫자로 입력해 주세요.");
-
-        } catch (IllegalArgumentException e) {
-            System.out.println("[ERROR] " + e.getMessage());
-        }
+        System.out.println(cmd.c2_edit(name, day, time));
     }
 
     private void runReport(){
-        try{
-            System.out.println("닉네임을 입력해 주세요.");
-            String name = Console.readLine();
-            System.out.println(cmd.c3_report(name));
-        } catch (IllegalArgumentException e) {
-            System.out.println("[ERROR] " + e.getMessage());
-        }
+        System.out.println("닉네임을 입력해 주세요.");
+        String name = Console.readLine();
+        System.out.println(cmd.c3_report(name));
     }
 
     private void runWatchlist(){
-        try{
-            System.out.println(cmd.c4_watchlist());
-        } catch (IllegalArgumentException e) {
-            System.out.println("[ERROR] " + e.getMessage());
-        }
+        System.out.println(cmd.c4_watchlist());
     }
 }
 

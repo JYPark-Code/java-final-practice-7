@@ -39,8 +39,7 @@ class AttendanceTest extends NsTest {
 
     @Test
     void 주말_또는_공휴일_예외_테스트() {
-        assertNowTest(
-                () -> assertThatThrownBy(() -> run("1"))
+        assertNowTest(() -> assertThatThrownBy(() -> run("1"))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessageContaining("[ERROR] 12월 14일 토요일은 등교일이 아닙니다."),
                 LocalDate.of(2024, 12, 14).atStartOfDay()
@@ -49,8 +48,7 @@ class AttendanceTest extends NsTest {
 
     @Test
     void 출석_확인_기능_테스트() {
-        assertNowTest(
-                () -> {
+        assertNowTest(                () -> {
                     runException("1", "짱수", "08:00");
                     assertThat(output()).contains("12월 13일 금요일 08:00 (출석)");
                 },

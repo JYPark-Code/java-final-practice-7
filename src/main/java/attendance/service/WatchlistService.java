@@ -6,6 +6,7 @@ import attendance.domain.Student;
 import attendance.domain.WarningStatus;
 import attendance.record.AttendanceStats;
 import attendance.repository.StudentRepository;
+import camp.nextstep.edu.missionutils.DateTimes;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class WatchlistService {
     }
 
     public List<RiskEntry> buildMonthlyWatchlist(){
-        LocalDate today = LocalDate.now();
+        LocalDate today = DateTimes.now().toLocalDate();
         int year = today.getYear();
         int month = today.getMonthValue();
 
@@ -68,7 +69,7 @@ public class WatchlistService {
 
     private List<Attendance> filterUntilYesterday(List<Attendance> all) {
         List<Attendance> result = new ArrayList<>();
-        LocalDate today = LocalDate.now();
+        LocalDate today = DateTimes.now().toLocalDate();
 
         for (Attendance a : all) {
             LocalDate date = a.getDate();
